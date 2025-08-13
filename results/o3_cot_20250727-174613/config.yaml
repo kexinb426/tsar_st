@@ -1,0 +1,42 @@
+experiments:
+- few_shot: 2
+  model: gpt-4o
+  name: gpt4o_with_description_2_shot
+  prompt_template: few_shot.txt
+- few_shot: 2
+  model: gpt-o1
+  name: gpto1_with_description_2_shot
+  prompt_template: few_shot.txt
+- few_shot: 2
+  model: gpt-o3
+  name: gpto3_with_description_2_shot
+  prompt_template: few_shot.txt
+- model: gpt-4o
+  name: gpt4o_cot
+  prompt_template: cot.txt
+- model: gpt-o1
+  name: gpto1_cot
+  prompt_template: cot.txt
+- model: gpt-o3
+  name: gpto3_cot
+  prompt_template: cot.txt
+models:
+  gpt-4o:
+    api_model_name: gpt-4o
+    temperature: 1.0
+    type: gpt
+  gpt-o1:
+    api_model_name: o1-2024-12-17
+    temperature: 1.0
+    type: gpt
+  gpt-o3:
+    api_model_name: o3-2025-04-16
+    temperature: 1.0
+    type: gpt
+paths:
+  evaluation_data: data/raw/tsar2025_trialdata.jsonl
+  input_docs: data/input/documents.jsonl
+  prompt_assets_dir: prompt_assets/
+  prompts_dir: prompts/
+  results_dir: results/
+random_seed: 42

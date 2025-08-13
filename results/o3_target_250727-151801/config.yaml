@@ -1,0 +1,28 @@
+experiments:
+- model: gpt-4o
+  name: gpt4o_target
+  prompt: target.txt
+- model: gpt-o1
+  name: gpto1_target
+  prompt: target.txt
+- model: gpt-o3
+  name: gpto3_target
+  prompt: target.txt
+models:
+  gpt-4o:
+    api_model_name: gpt-4o
+    temperature: 1.0
+    type: gpt
+  gpt-o1:
+    api_model_name: o1-2024-12-17
+    temperature: 1.0
+    type: gpt
+  gpt-o3:
+    api_model_name: o3-2025-04-16
+    temperature: 1.0
+    type: gpt
+paths:
+  evaluation_data: data/raw/tsar2025_trialdata.jsonl
+  input_docs: data/input/documents.jsonl
+  prompts_dir: prompts/
+  results_dir: results/

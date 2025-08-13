@@ -1,0 +1,10 @@
+# Files
+.env
+
+# Directories
+__pycache__/
+venv/
+
+# OS junk
+# .DS_Store
+# Thumbs.db

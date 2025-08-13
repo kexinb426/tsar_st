@@ -1,0 +1,3 @@
+Please simplify the following Complex Document to make it easier to read and understand by {target_cefr} CEFR level English learners. To simplify, you may replace difficult words with simpler ones, elaborate, or remove them when possible. You may also break down a lengthy sentence into shorter, clear sentences. Ensure the revised sentence is grammatically correct, fluent, and maintains the core message of the original without changing its meaning. Reply only with the simplified text, and nothing else.
+Complex Document: {document_text}
+Simplified Document:

@@ -1,0 +1,101 @@
+random_seed: 42
+
+# --- File Paths ---
+paths:
+  input_docs: "data/input/documents.jsonl"
+  evaluation_data: "data/raw/tsar2025_trialdata.jsonl"
+  prompts_dir: "prompts/"
+  prompt_assets_dir: "prompt_assets/"
+  results_dir: "results/"
+
+# --- Model Definitions ---
+# Define the models you can use.
+models:
+  gpt-4o:
+    type: "gpt"
+    api_model_name: "gpt-4o"
+    temperature: 1.0
+  o1:
+    type: "gpt"
+    api_model_name: "o1-2024-12-17"
+    temperature: 1.0
+  o3:
+    type: "gpt"
+    api_model_name: "o3-2025-04-16"
+    temperature: 1.0
+  
+  gpt-5:
+    type: "gpt"
+    api_model_name: "gpt-5-2025-08-07"
+    temperature: 1.0
+  
+  claude-3-7-sonnet:
+    type: "claude"
+    api_model_name: "arn:aws:bedrock:ap-southeast-2:340752822738:inference-profile/apac.anthropic.claude-3-7-sonnet-20250219-v1:0"
+    temperature: 1.0
+  claude-4-sonnet:
+    type: "claude"
+    api_model_name: "arn:aws:bedrock:ap-southeast-2:340752822738:inference-profile/apac.anthropic.claude-sonnet-4-20250514-v1:0"
+    temperature: 1.0
+  
+  gemma-3-4b-it:
+    type: "gemma"
+    api_model_name: "google/gemma-3-4b-it"
+    temperature: 1.0
+
+# --- Experiments ---
+experiments:
+  # - name: "gpt_5_target"
+  #   model: "gpt-5"
+  #   prompt_template: "target.txt"
+  
+  # - name: "gpt_5_with_description"
+  #   model: "gpt-5"
+  #   prompt_template: "with_description.txt"
+  
+  # - name: "gpt_5_1_shot"
+  #   model: "gpt-5"
+  #   prompt_template: "few_shot.txt"
+  #   few_shot: 1
+  
+  # - name: "gpt_5_2_shot"
+  #   model: "gpt-5"
+  #   prompt_template: "few_shot.txt"
+  #   few_shot: 2
+
+  - name: "gpt_5_contrastive"
+    model: "gpt-5"
+    prompt_template: "contrastive_few_shot.txt"
+    dynamic_contrastive:
+      num_examples: 1
+# ------------------
+
+  # - name: "gpt4o_contrastive"
+  #   model: "gpt-4o"
+  #   prompt_template: "contrastive_few_shot.txt"
+  #   dynamic_contrastive:
+  #     num_examples: 1
+      
+  # - name: "o1_contrastive"
+  #   model: "o1"
+  #   prompt_template: "contrastive_few_shot.txt"
+  #   dynamic_contrastive:
+  #     num_examples: 1
+  
+  # - name: "o3_contrastive"
+  #   model: "o3"
+  #   prompt_template: "contrastive_few_shot.txt"
+  #   dynamic_contrastive:
+  #     num_examples: 1
+  
+  # - name: "claude_4_contrastive"
+  #   model: "claude-4-sonnet"
+  #   prompt_template: "contrastive_few_shot.txt"
+  #   dynamic_contrastive:
+  #     num_examples: 1
+  
+  # - name: "gemma_3_contrastive"
+  #   model: "gemma-3-4b-it"
+  #   prompt_template: "contrastive_few_shot.txt"
+  #   dynamic_contrastive:
+  #     num_examples: 1

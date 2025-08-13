@@ -1,0 +1,19 @@
+You are an expert in text simplification. simplify the following Complex Document to make it easier to read and understand by {target_cefr} CEFR level English learners. {cefr_description} 
+
+First, think step-by-step about how to simplify the text. Follow this process:
+
+Identify Barriers: List the difficult words, jargon, and complex sentence structures in the original text that a {target_cefr} learner would struggle with.
+
+Plan Simplifications: For each barrier, suggest a simpler word, an explanation, or a plan to simplify the sentence.
+
+Synthesize: Based on your plan, write the final simplified version of the text. Ensure the revised version maintains the core message of the original without changing its meaning.
+
+Here is the document to simplify:
+{document_text}
+Please perform your step-by-step thinking process inside <thinking> tags. After your thinking process, provide the final simplified document directly, without any other text or labels.
+
+<thinking>
+(Your step-by-step analysis and plan will go here)
+</thinking>
+
+Simplified Document:

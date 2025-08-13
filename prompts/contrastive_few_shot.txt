@@ -1,0 +1,13 @@
+Please simplify the following Complex Document to make it easier to read and understand by {target_cefr} CEFR level English learners. {cefr_description} 
+
+To do this effectively, you must first learn the difference between an A2 simplification and a B1 simplification. I will provide you with examples for both levels. Pay close attention to the different strategies used for each.
+
+A2 Level Examples: 
+{a2_examples}
+B1 Level Examples:
+{b1_examples}
+
+Now, use what you have learned about the differences between the levels. Your task is to simplify the following document to the {target_cefr} level, strictly following the style of the {target_cefr} examples you have seen. Ensure the revised sentence is grammatically correct, fluent, and maintains the core message of the original without changing its meaning. Reply only with the simplified text, and nothing else.
+
+Complex Document: {document_text}
+Simplified Document:
