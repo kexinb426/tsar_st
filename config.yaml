@@ -7,6 +7,7 @@ paths:
   prompts_dir: "prompts/"
   prompt_assets_dir: "prompt_assets/"
   results_dir: "results/"
+  scored_references: "data/references_with_scores.jsonl"
 
 # --- Model Definitions ---
 # Define the models you can use.
@@ -45,9 +46,44 @@ models:
 
 # --- Experiments ---
 experiments:
+  # - name: "gpt5_1_shot_random"
+  #   model: "gpt-5"
+  #   prompt_template: "few_shot.txt"
+  #   few_shot: 1
+  #   few_shot_selection: "random" # NEW config: random sampling
+
+  - name: "o1_2_shot_confidence"
+    model: "o1"
+    prompt_template: "few_shot.txt"
+    few_shot: 2
+    few_shot_selection: "confidence"
+  
+  - name: "o3_2_shot_confidence"
+    model: "o3"
+    prompt_template: "few_shot.txt"
+    few_shot: 2
+    few_shot_selection: "confidence"
+
+  # - name: "o1_1_shot_contrastive_confidence"
+  #   model: "o1"
+  #   prompt_template: "contrastive_few_shot.txt"
+  #   contrastive:
+  #     num_examples: 1
+  #   few_shot_selection: "confidence"
+  
+  # - name: "o3_1_shot_contrastive_confidence"
+  #   model: "o3"
+  #   prompt_template: "contrastive_few_shot.txt"
+  #   contrastive:
+  #     num_examples: 1
+  #   few_shot_selection: "confidence"
+  
+  # ------------------------------------------------
+
   # - name: "gpt_5_target"
   #   model: "gpt-5"
   #   prompt_template: "target.txt"
+  #   sample_size: 5
   
   # - name: "gpt_5_with_description"
   #   model: "gpt-5"
@@ -63,11 +99,11 @@ experiments:
   #   prompt_template: "few_shot.txt"
   #   few_shot: 2
 
-  - name: "gpt_5_contrastive"
-    model: "gpt-5"
-    prompt_template: "contrastive_few_shot.txt"
-    dynamic_contrastive:
-      num_examples: 1
+  # - name: "gpt_5_contrastive"
+  #   model: "gpt-5"
+  #   prompt_template: "contrastive_few_shot.txt"
+  #   dynamic_contrastive:
+  #     num_examples: 1
 # ------------------
 
   # - name: "gpt4o_contrastive"

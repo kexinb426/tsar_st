@@ -1,0 +1,4 @@
+model_name,best_score_r2,best_params
+XGBoost,0.38869830553592405,"{'learning_rate': 0.05, 'max_depth': 5, 'n_estimators': 100}"
+LightGBM,0.3825488665100165,"{'learning_rate': 0.05, 'n_estimators': 100, 'num_leaves': 31}"
+Ridge,0.27130938500573487,{'alpha': 0.1}

@@ -63,7 +63,7 @@ def aggregate_results(results_dir='results'):
     print(df.to_string())
 
     # Save the table to a CSV file for easy access
-    summary_csv_path = 'results_summary_gpt5.csv'
+    summary_csv_path = 'a_misc./agg_results/results_summary_o1.csv'
     df.to_csv(summary_csv_path)
     print(f"\n✅ Summary table saved to '{summary_csv_path}'")
 
