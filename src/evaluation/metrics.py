@@ -10,7 +10,23 @@ def _read_jsonl(filepath):
     with open(filepath, 'r', encoding='utf-8') as f:
         return [json.loads(line) for line in f]
 
-# --- This is the main function you will call from your other scripts! ---
+def _get_cefr_predictions(simplifications: list, models: list):
+    """
+    For each simplification, runs all CEFR models and returns the prediction
+    from the model with the highest confidence score (winner-takes-all).
+    
+    Returns a list of prediction dictionaries, e.g., [{'label': 'A2', 'score': 0.95}, ...].
+    """
+    all_best_preds = []
+    for text in simplifications:
+        # Get a prediction from each of the three models
+        top_preds = (model(text)[0] for model in models)
+        # Find the prediction with the highest confidence score
+        best_pred = max(top_preds, key=lambda d: d["score"])
+        all_best_preds.append(best_pred)
+    return all_best_preds
+
+# --- main function called from other scripts! ---
 def run_evaluation(system_output_path: str, reference_data_path: str):
     """
     The main "Head Judge" function.
@@ -41,23 +57,19 @@ def run_evaluation(system_output_path: str, reference_data_path: str):
     print(f"   -> System output has {len(sys_data)} entries. Found {len(ref_data)} matching entries in reference data.")
     assert len(ref_data) == len(sys_data), "Data alignment failed."
     
-    # Prepare lists of texts for batch processing
     original_texts = [entry['original'] for entry in ref_data]
     target_cefr_levels = [entry['target_cefr'].upper() for entry in ref_data]
     reference_texts = [entry['reference'] for entry in ref_data]
     simplified_texts = [entry['simplified'] for entry in sys_data]
 
-    # 3. Calculate all scores in batches for efficiency
+    # 3. Calculate all scores
     print("   -> Calculating scores for each instance...")
     
-    # CEFR scores
-    predicted_cefr_labels = [model(s)[0] for s in simplified_texts for model in cefr_models] # Simplified for brevity
+    # Get the single best prediction for each simplified text
+    cefr_predictions = _get_cefr_predictions(simplified_texts, cefr_models)
     
-    # Meaning Preservation scores
     meaningbert_scores_org = [meaning_bert.compute(predictions=[p], references=[r])['scores'][0] for p, r in zip(simplified_texts, original_texts)]
     bertscore_results_org = bertscore.compute(references=original_texts, predictions=simplified_texts, lang="en")
-
-    # Similarity to Reference scores
     meaningbert_scores_ref = [meaning_bert.compute(predictions=[p], references=[r])['scores'][0] for p, r in zip(simplified_texts, reference_texts)]
     bertscore_results_ref = bertscore.compute(references=reference_texts, predictions=simplified_texts, lang="en")
 
@@ -68,12 +80,13 @@ def run_evaluation(system_output_path: str, reference_data_path: str):
     
     for i in range(len(sys_data)):
         true_cefr_idx = LABEL2IDX.get(target_cefr_levels[i], -1)
-        pred_cefr_idx = LABEL2IDX.get(predicted_cefr_labels[i]['label'], -1)
+        pred_cefr_idx = LABEL2IDX.get(cefr_predictions[i]['label'], -1)
         
         instance_score = {
             "text_id": sys_data[i]['text_id'],
             "target_cefr": target_cefr_levels[i],
-            "predicted_cefr": predicted_cefr_labels[i]['label'],
+            "predicted_cefr": cefr_predictions[i]['label'],
+            "predicted_cefr_confidence": round(cefr_predictions[i]['score'], 4),
             "cefr_adj_accuracy": 1 if abs(true_cefr_idx - pred_cefr_idx) <= 1 else 0,
             "meaningbert_orig": round(meaningbert_scores_org[i] / 100, 4),
             "bertscore_f1_orig": round(bertscore_results_org['f1'][i], 4),
@@ -91,7 +104,7 @@ def run_evaluation(system_output_path: str, reference_data_path: str):
 
     aggregated_scores = {
         "CEFR Compliance": {
-            "weighted_f1": round(f1_score(target_cefr_levels, agg_predicted_cefr, average='weighted', labels=CEFR_LABELS), 4),
+            "weighted_f1": round(f1_score(target_cefr_levels, agg_predicted_cefr, average='weighted', labels=CEFR_LABELS, zero_division=0), 4),
             "adj_accuracy": round(np.mean(agg_adj_accuracy), 4),
             "rmse": round(root_mean_squared_error(agg_true_idx, agg_pred_idx), 4)
         },

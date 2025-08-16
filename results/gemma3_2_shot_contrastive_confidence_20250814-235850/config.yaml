@@ -1,0 +1,49 @@
+experiments:
+- few_shot: 2
+  few_shot_selection: confidence
+  model: gemma-3-4b-it
+  name: gemma3_2_shot_confidence
+  prompt_template: few_shot.txt
+- contrastive:
+    num_examples: 2
+  few_shot_selection: confidence
+  model: gemma-3-4b-it
+  name: gemma3_2_shot_contrastive_confidence
+  prompt_template: contrastive_few_shot.txt
+models:
+  claude-3-7-sonnet:
+    api_model_name: arn:aws:bedrock:ap-southeast-2:340752822738:inference-profile/apac.anthropic.claude-3-7-sonnet-20250219-v1:0
+    temperature: 1.0
+    type: claude
+  claude-4-sonnet:
+    api_model_name: arn:aws:bedrock:ap-southeast-2:340752822738:inference-profile/apac.anthropic.claude-sonnet-4-20250514-v1:0
+    temperature: 1.0
+    type: claude
+  gemma-3-4b-it:
+    api_model_name: google/gemma-3-4b-it
+    temperature: 1.0
+    type: gemma
+  gpt-4o:
+    api_model_name: gpt-4o
+    temperature: 1.0
+    type: gpt
+  gpt-5:
+    api_model_name: gpt-5-2025-08-07
+    temperature: 1.0
+    type: gpt
+  o1:
+    api_model_name: o1-2024-12-17
+    temperature: 1.0
+    type: gpt
+  o3:
+    api_model_name: o3-2025-04-16
+    temperature: 1.0
+    type: gpt
+paths:
+  evaluation_data: data/raw/tsar2025_trialdata.jsonl
+  input_docs: data/input/documents.jsonl
+  prompt_assets_dir: prompt_assets/
+  prompts_dir: prompts/
+  results_dir: results/
+  scored_references: data/references_with_scores.jsonl
+random_seed: 42

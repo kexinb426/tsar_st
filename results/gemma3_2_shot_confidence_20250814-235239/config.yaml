@@ -1,22 +1,14 @@
 experiments:
-- model: gpt-5
-  name: gpt_5_target
-  prompt_template: target.txt
-- model: gpt-5
-  name: gpt_5_with_description
-  prompt_template: with_description.txt
-- few_shot: 1
-  model: gpt-5
-  name: gpt_5_1_shot
-  prompt_template: few_shot.txt
 - few_shot: 2
-  model: gpt-5
-  name: gpt_5_2_shot
+  few_shot_selection: confidence
+  model: gemma-3-4b-it
+  name: gemma3_2_shot_confidence
   prompt_template: few_shot.txt
-- dynamic_contrastive:
-    num_examples: 1
-  model: gpt-5
-  name: gpt_5_contrastive
+- contrastive:
+    num_examples: 2
+  few_shot_selection: confidence
+  model: gemma-3-4b-it
+  name: gemma3_2_shot_contrastive_confidence
   prompt_template: contrastive_few_shot.txt
 models:
   claude-3-7-sonnet:
@@ -53,4 +45,5 @@ paths:
   prompt_assets_dir: prompt_assets/
   prompts_dir: prompts/
   results_dir: results/
+  scored_references: data/references_with_scores.jsonl
 random_seed: 42

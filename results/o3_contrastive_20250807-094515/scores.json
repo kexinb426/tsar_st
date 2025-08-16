@@ -1,8 +1,8 @@
 {
     "CEFR Compliance": {
-        "weighted_f1": 0.5312,
-        "adj_accuracy": 0.925,
-        "rmse": 0.8367
+        "weighted_f1": 0.7286,
+        "adj_accuracy": 1.0,
+        "rmse": 0.5477
     },
     "Meaning Preservation": {
         "MeaningBERT-Orig": 0.7547,

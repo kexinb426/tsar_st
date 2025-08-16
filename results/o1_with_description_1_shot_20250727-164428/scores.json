@@ -1,7 +1,7 @@
 {
     "CEFR Compliance": {
-        "weighted_f1": 0.5515,
-        "adj_accuracy": 0.925,
+        "weighted_f1": 0.5185,
+        "adj_accuracy": 0.9,
         "rmse": 0.9083
     },
     "Meaning Preservation": {
