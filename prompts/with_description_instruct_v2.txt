@@ -1,0 +1,12 @@
+You are an assistant that rewrites texts for English learners. 
+Please simplify the following Complex Document so that it matches the {target_cefr} CEFR level. 
+{cefr_description}
+
+Follow these specific rules for {target_cefr} simplification:
+{cefr_instruction}
+
+The final text must be grammatically correct, fluent, and easy for a {target_cefr} learner to understand. 
+Reply only with the simplified text, and nothing else.
+
+Complex Document: {document_text}
+Simplified Document:

@@ -107,16 +107,18 @@ def rerun_cefr_only(results_folder_path):
     
     ind_scores_map = {score['text_id']: score for score in individual_scores_old}
     new_individual_scores = []
-    for i, pred in enumerate(new_cefr_predictions):
+    for i, pred_data in enumerate(new_cefr_predictions):
         text_id = sys_data[i]['text_id']
         updated_score = ind_scores_map[text_id]
         
+        best_pred = pred_data['best_prediction']
         true_cefr_idx = LABEL2IDX.get(target_cefr_levels[i], -1)
-        pred_cefr_idx = LABEL2IDX.get(pred['label'], -1)
+        pred_cefr_idx = LABEL2IDX.get(best_pred['label'], -1)
         
-        updated_score['predicted_cefr'] = pred['label']
-        updated_score['predicted_cefr_confidence'] = round(pred['score'], 4)
+        updated_score['predicted_cefr'] = best_pred['label']
+        updated_score['predicted_cefr_confidence'] = round(best_pred['score'], 4)
         updated_score['cefr_adj_accuracy'] = 1 if abs(true_cefr_idx - pred_cefr_idx) <= 1 else 0
+        updated_score['cefr_probas'] = pred_data['all_model_probas'] # <-- NEWLY ADDED
         
         new_individual_scores.append(updated_score)
 

@@ -1,5 +1,6 @@
 # src/evaluation/metrics.py
 import json
+import os
 import numpy as np
 from sklearn.metrics import f1_score, root_mean_squared_error
 from transformers import pipeline
@@ -12,19 +13,35 @@ def _read_jsonl(filepath):
 
 def _get_cefr_predictions(simplifications: list, models: list):
     """
-    For each simplification, runs all CEFR models and returns the prediction
-    from the model with the highest confidence score (winner-takes-all).
+    For each simplification, runs all CEFR models.
     
-    Returns a list of prediction dictionaries, e.g., [{'label': 'A2', 'score': 0.95}, ...].
+    Returns a list of dictionaries, where each dictionary contains:
+    - 'best_prediction': The winner-takes-all prediction ({'label': 'A2', 'score': 0.95}).
+    - 'all_model_probas': Full probability distributions from each model.
     """
-    all_best_preds = []
+    all_results = []
     for text in simplifications:
-        # Get a prediction from each of the three models
-        top_preds = (model(text)[0] for model in models)
-        # Find the prediction with the highest confidence score
-        best_pred = max(top_preds, key=lambda d: d["score"])
-        all_best_preds.append(best_pred)
-    return all_best_preds
+        # Get full probability distributions from each model
+        model_outputs = [model(text, return_all_scores=True)[0] for model in models]
+
+        # Find the overall best prediction (winner-takes-all)
+        top_preds_from_each_model = [max(output, key=lambda d: d['score']) for output in model_outputs]
+        best_overall_pred = max(top_preds_from_each_model, key=lambda d: d['score'])
+
+        # Structure the full probabilities for storage
+        all_probas = {}
+        for i, model_output in enumerate(model_outputs):
+            # Use the model's name as a descriptive key
+            model_name = os.path.basename(models[i].model.config._name_or_path)
+            probas_dict = {d['label']: round(d['score'], 6) for d in model_output}
+            all_probas[model_name] = probas_dict
+            
+        all_results.append({
+            "best_prediction": best_overall_pred,
+            "all_model_probas": all_probas
+        })
+        
+    return all_results
 
 # --- main function called from other scripts! ---
 def run_evaluation(system_output_path: str, reference_data_path: str):
@@ -65,7 +82,7 @@ def run_evaluation(system_output_path: str, reference_data_path: str):
     # 3. Calculate all scores
     print("   -> Calculating scores for each instance...")
     
-    # Get the single best prediction for each simplified text
+    # Get the rich prediction data for each simplified text
     cefr_predictions = _get_cefr_predictions(simplified_texts, cefr_models)
     
     meaningbert_scores_org = [meaning_bert.compute(predictions=[p], references=[r])['scores'][0] for p, r in zip(simplified_texts, original_texts)]
@@ -79,19 +96,21 @@ def run_evaluation(system_output_path: str, reference_data_path: str):
     LABEL2IDX = {label: idx for idx, label in enumerate(CEFR_LABELS)}
     
     for i in range(len(sys_data)):
+        best_pred = cefr_predictions[i]['best_prediction']
         true_cefr_idx = LABEL2IDX.get(target_cefr_levels[i], -1)
-        pred_cefr_idx = LABEL2IDX.get(cefr_predictions[i]['label'], -1)
+        pred_cefr_idx = LABEL2IDX.get(best_pred['label'], -1)
         
         instance_score = {
             "text_id": sys_data[i]['text_id'],
             "target_cefr": target_cefr_levels[i],
-            "predicted_cefr": cefr_predictions[i]['label'],
-            "predicted_cefr_confidence": round(cefr_predictions[i]['score'], 4),
+            "predicted_cefr": best_pred['label'],
+            "predicted_cefr_confidence": round(best_pred['score'], 4),
             "cefr_adj_accuracy": 1 if abs(true_cefr_idx - pred_cefr_idx) <= 1 else 0,
             "meaningbert_orig": round(meaningbert_scores_org[i] / 100, 4),
             "bertscore_f1_orig": round(bertscore_results_org['f1'][i], 4),
             "meaningbert_ref": round(meaningbert_scores_ref[i] / 100, 4),
             "bertscore_f1_ref": round(bertscore_results_ref['f1'][i], 4),
+            "cefr_probas": cefr_predictions[i]['all_model_probas'] # <-- NEWLY ADDED
         }
         individual_results.append(instance_score)
 

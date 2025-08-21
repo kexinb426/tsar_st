@@ -1,4 +1,7 @@
 # prepare_data.py
+"""
+Create separate files for original and human references from trial data 
+"""
 import json
 import os
 

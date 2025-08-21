@@ -4,6 +4,7 @@
 # Directories
 __pycache__/
 venv/
+a_misc./tsar2025_st/
 
 # OS junk
 # .DS_Store

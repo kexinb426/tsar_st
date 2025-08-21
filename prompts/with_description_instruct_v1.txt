@@ -1,0 +1,11 @@
+Please simplify the following Complex Document to make it easier to read and understand by {target_cefr} CEFR level English learners. {cefr_description}
+
+To simplify the text, you must follow these rules precisely:
+1. Prioritize Sentence Structure: Where possible, simplify within each sentence. You should only split a long sentence into multiple shorter ones if it is absolutely necessary to meet the {target_cefr} complexity level.
+2. Retain Core Information: You must preserve all key nouns (such as names, places, and important concepts) from the original text. Your goal is to simplify the language, not the information.
+3. Prioritize Substitution over Deletion: Your primary method of simplification should be to replace complex words and phrases with simpler alternatives that mean the same thing. Avoid deleting information or clauses unless they are truly redundant.
+
+The final text must be grammatically correct, fluent, and easy for a {target_cefr} learner to understand. Reply only with the simplified text, and nothing else.
+
+Complex Document: {document_text}
+Simplified Document: 

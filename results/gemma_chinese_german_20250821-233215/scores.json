@@ -1,0 +1,15 @@
+{
+    "CEFR Compliance": {
+        "weighted_f1": 1.0,
+        "adj_accuracy": 1.0,
+        "rmse": 0.0
+    },
+    "Meaning Preservation": {
+        "MeaningBERT-Orig": 0.6168,
+        "BERTScore-Orig": 0.914
+    },
+    "Similarity to References": {
+        "MeaningBERT-Ref": 0.6467,
+        "BERTScore-Ref": 0.9029
+    }
+}
