@@ -14,6 +14,10 @@ def build_prompt(
     cefr_instructions: dict,
     cefr_translate_instructions: dict,
     cefr_simp_from_trans_instructions: dict,
+    cefr_judge_criterias: dict,
+    avoid_words: list,
+    named_entities: list,
+    source_predicted_cefr: str,
     standard_examples: list,
     a2_examples: list,
     b1_examples: list
@@ -36,6 +40,9 @@ def build_prompt(
     cefr_instruction = cefr_instructions.get(target_cefr, "")
     cefr_translate_instruction = cefr_translate_instructions.get(target_cefr, "")
     cefr_simp_from_trans_instruction = cefr_simp_from_trans_instructions.get(target_cefr, "")
+    cefr_judge_criteria = cefr_judge_criterias.get(target_cefr, "")
+    avoid_words_text = ", ".join(avoid_words)
+    named_entities_text = ", ".join(named_entities)
     standard_examples_text = format_examples(standard_examples)
     a2_examples_text = format_examples(a2_examples)
     b1_examples_text = format_examples(b1_examples)
@@ -49,6 +56,10 @@ def build_prompt(
         'cefr_instruction': cefr_instruction,
         'cefr_translate_instruction': cefr_translate_instruction,
         'cefr_simp_from_trans_instruction': cefr_simp_from_trans_instruction,
+        'cefr_judge_criteria': cefr_judge_criteria,
+        'avoid_words_list': avoid_words_text,
+        'named_entities_list': named_entities_text,
+        'source_cefr_level': source_predicted_cefr,
         'few_shot_examples': standard_examples_text,
         'a2_examples': a2_examples_text,
         'b1_examples': b1_examples_text

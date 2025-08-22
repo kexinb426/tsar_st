@@ -51,24 +51,34 @@ def main():
     # Load all datasets
     input_documents = read_jsonl(paths['input_docs'])
     scored_references = read_jsonl(paths.get('scored_references', ''))
-    difficulty_data = read_jsonl(paths.get('source_difficulty_data', ''))
+    source_analysis_data = read_jsonl(paths.get('source_analysis_data', ''))
+
+    # Create lookup maps for the new data
+    avoid_words_map = {doc['text_id']: doc.get('avoid_words', []) for doc in source_analysis_data}
+    named_entities_map = {doc['text_id']: doc.get('named_entities', []) for doc in source_analysis_data}
+    source_cefr_map = {doc['text_id']: doc.get('predicted_cefr', 'N/A') for doc in source_analysis_data}
+
 
     # Pre-sort examples and create lookup maps
     examples_by_level = defaultdict(list)
     for doc in scored_references: # Use scored references for confidence
         examples_by_level[doc['target_cefr'].upper()].append(doc)
         
-    difficulty_map = {doc['text_id']: doc.get('difficulty_vector') for doc in difficulty_data}
+    # difficulty_map = {doc['text_id']: doc.get('difficulty_vector') for doc in difficulty_data}
 
     # Load all prompt assets
     all_data = {
         'input_documents': input_documents,
         'examples_by_level': examples_by_level,
-        'difficulty_map': difficulty_map,
+        # 'difficulty_map': difficulty_map,
         'cefr_descriptions': load_json(os.path.join(paths['prompt_assets_dir'], 'cefr_descriptions.json')),
         'cefr_instructions': load_json(os.path.join(paths['prompt_assets_dir'], 'cefr_instructions.json')),
         'cefr_translate_instructions': load_json(os.path.join(paths['prompt_assets_dir'], 'cefr_translate_instructions.json')),
         'cefr_simp_from_trans_instructions': load_json(os.path.join(paths['prompt_assets_dir'], 'cefr_simp_from_trans_instructions.json')),
+        'cefr_judge_criterias': load_json(os.path.join(paths['prompt_assets_dir'], 'cefr_judge_criterias.json')),
+        'avoid_words_map': avoid_words_map,
+        'named_entities_map': named_entities_map,
+        'source_cefr_map': source_cefr_map,
         'prompt_templates': load_all_prompt_templates(paths['prompts_dir'])
     }
     

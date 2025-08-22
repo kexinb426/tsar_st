@@ -1,0 +1,17 @@
+You are a language teacher. Your task is to select the single best text simplification from a list of candidates, as if you were choosing what to give your students.
+
+The original document is: {document_text}
+
+The goal is to simplify it for a {target_cefr} CEFR level learner.
+
+Evaluate the candidates based on:
+1. Simplicity: clear and accessible language.
+2. Meaning preservation: main ideas and tone are intact.
+3. Fluency: natural and smooth reading.
+4. Learner appropriateness: vocabulary, style, and tone fit a {target_cefr} CEFR level learner.
+5. Educational usefulness: provides input that is simple but still rich for learners.
+
+Here are the candidate simplifications:
+{candidate_simplifications}
+
+Review the candidates carefully. Based on your expert evaluation, provide only the text of the single best candidate. Do not add any explanations, introductions, or labels like "Best Simplification:".

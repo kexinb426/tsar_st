@@ -3,6 +3,7 @@ import os
 import json
 import pandas as pd
 from collections import defaultdict
+from datetime import datetime
 
 def aggregate_results(results_dir='results'):
     """
@@ -62,8 +63,8 @@ def aggregate_results(results_dir='results'):
     # Print the full table to the console
     print(df.to_string())
 
-    # Save the table to a CSV file for easy access
-    summary_csv_path = 'a_misc./agg_results/results_summary_08201235.csv'
+    timestamp = datetime.now().strftime("%m%d%H%M")
+    summary_csv_path = f"a_misc./agg_results/results_summary_{timestamp}.csv"
     df.to_csv(summary_csv_path)
     print(f"\n✅ Summary table saved to '{summary_csv_path}'")
 

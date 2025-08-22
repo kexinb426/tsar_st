@@ -9,6 +9,7 @@ paths:
   results_dir: "results/"
   scored_references: "data/references_with_scores.jsonl"
   source_difficulty_data: "data/source_with_difficulty.jsonl"
+  source_analysis_data: "data/source_with_difficulty_word_lists.jsonl"
 
 # --- Model Definitions ---
 # Define the models you can use.
@@ -47,60 +48,89 @@ models:
 
 # --- Pipelines ---
 pipelines:
-  # - name: "gemma_2_9b_cot" # The pipeline gets the old experiment name
-  #   steps:
-  #     - step_name: "simplify" # Give the single step a simple name
-  #       model: "gemma-2-9b-it"
-  #       prompt_template: "chain_of_thought.txt"
-  #       sample_size: 3
+  # - name: "o3_ensemble"
+  #   pipeline_type: "ensemble"
+  #   candidate_runs: [
+  #     "results/claude_chinese_german_20250822-001217",
+  #     "results/o1_chinese_german_20250821-235916",
+  #     "results/gpt5_chinese_german_20250821-233630",
+  #     "results/o1_chinese_spanish_20250822-050913",
+  #     "results/o1_chinese_spanish_20250822-070729",
+  #     "results/claude4_1_shot_contrastive_confidence_20250814-231336",
+  #     "results/gemma3_1_shot_contrastive_confidence_20250814-234437",
+  #     "results/gpt5_1_shot_contrastive_confidence_20250814-222216",
+  #     "results/o1_1_shot_contrastive_confidence_20250816-001954"
+  #   ]
+    # steps:
+    #   - step_name: "filter_by_metrics"
+    #     filter_criteria:
+    #       # pre_calculate_metrics:
+    #       #   # The key is the new metric name, the value is the formula
+    #       #   edit_distance: "levenshtein(original, simplified)"
+    #       #   length_ratio: "len(simplified) / len(original)"
+    #       # # Now, use your new metrics in the ranking strategy
+    #       # strategy: "top_percent"
+    #       # metric: "BERTScore-Orig + MeaningBERT-Orig" # Rank by a combination of old and new scores
+    #       # percentile: 35
+    #   - step_name: "llm_judge_fusion"
+    #     model: "o3"
+    #     prompt_template: "llm_judge_fusion.txt"
 
-  # - name: "gpt4o_contrastive_confidence"
-  #   steps:
-  #     - step_name: "simplify_contrastive"
-  #       model: "gpt-4o"
-  #       prompt_template: "contrastive_few_shot.txt"
-  #       contrastive:
-  #         num_examples: 2
-  #       few_shot_selection: "confidence"
-  #       sample_size: 5
-
-  - name: "gpt5_chinese_spanish"
+  - name: "gpt5_shimada_0_shot"
     steps:
-      - step_name: "translate"
+      - step_name: "simplify"
         model: "gpt-5"
-        prompt_template: "translate.txt"
-
-      - step_name: "translate_and_simplify"
-        model: "gpt-5"
-        prompt_template: "simplify_from_translation.txt"
+        prompt_template: "shimada_0_shot.txt"
   
-  - name: "o1_chinese_spanish"
+  - name: "claude4_shimada_0_shot"
     steps:
-      - step_name: "translate"
-        model: "o1"
-        prompt_template: "translate.txt"
-
-      - step_name: "translate_and_simplify"
-        model: "o1"
-        prompt_template: "simplify_from_translation.txt"
-  
-  - name: "claude_chinese_spanish"
-    steps:
-      - step_name: "translate"
+      - step_name: "simplify"
         model: "claude-4-sonnet"
-        prompt_template: "translate.txt"
-
-      - step_name: "translate_and_simplify"
-        model: "claude-4-sonnet"
-        prompt_template: "simplify_from_translation.txt"
+        prompt_template: "shimada_0_shot.txt"
   
-  - name: "gemma_chinese_spanish"
+  - name: "o1_shimada_0_shot"
     steps:
-      - step_name: "translate"
-        model: "gemma-3-4b-it"
-        prompt_template: "translate.txt"
+      - step_name: "simplify"
+        model: "o1"
+        prompt_template: "shimada_0_shot.txt"
 
-      - step_name: "translate_and_simplify"
-        model: "gemma-3-4b-it"
-        prompt_template: "simplify_from_translation.txt"
+  # - name: "gpt5_chinese_spanish"
+  #   steps:
+  #     - step_name: "translate"
+  #       model: "gpt-5"
+  #       prompt_template: "translate.txt"
+
+  #     - step_name: "translate_and_simplify"
+  #       model: "gpt-5"
+  #       prompt_template: "simplify_from_translation.txt"
+  
+  # - name: "o1_chinese_spanish"
+  #   steps:
+  #     - step_name: "translate"
+  #       model: "o1"
+  #       prompt_template: "translate.txt"
+
+  #     - step_name: "translate_and_simplify"
+  #       model: "o1"
+  #       prompt_template: "simplify_from_translation.txt"
+  
+  # - name: "claude_chinese_spanish"
+  #   steps:
+  #     - step_name: "translate"
+  #       model: "claude-4-sonnet"
+  #       prompt_template: "translate.txt"
+
+  #     - step_name: "translate_and_simplify"
+  #       model: "claude-4-sonnet"
+  #       prompt_template: "simplify_from_translation.txt"
+  
+  # - name: "gemma_chinese_spanish"
+  #   steps:
+  #     - step_name: "translate"
+  #       model: "gemma-3-4b-it"
+  #       prompt_template: "translate.txt"
+
+  #     - step_name: "translate_and_simplify"
+  #       model: "gemma-3-4b-it"
+  #       prompt_template: "simplify_from_translation.txt"
   
